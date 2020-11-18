@@ -49,7 +49,7 @@
         <ul>
           <li v-for="log in logs" :key="log">
             <span :class="{'log--player': log.actionBy === 'player', 'log--monster': log.actionBy === 'monster'}">{{ log.actionBy === 'player' ? 'Player ' : 'Monster ' }}</span>
-            <span v-if="log.actionType === 'heal'">heals himself for<span class="log--heal">{{ log.actionValue}}</span></span>
+            <span v-if="log.actionType === 'heal'">heals himself for <span class="log--heal">{{ log.actionValue}}</span></span>
             <span v-else>attacks and deals <span :class="{'log--damage': log.actionBy === 'player', 'log--monster': log.actionBy === 'monster'}">{{ log.actionValue}}</span></span>
           </li>
         </ul>
