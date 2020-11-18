@@ -8,18 +8,52 @@ const app = Vue.createApp({
         return {
             healthPlayer: 100,      // starting health of the Player
             healthMonster: 100,     // starting health of the Monster
-            currentRound: 0         // round obviously starts at 0
+            currentRound: 0,        // round obviously starts at 0
+            winner: null            // winner of the game
+        }
+    },
+    watch: {
+        healthPlayer(value) {
+            if(value <= 0 && this.healthMonster <= 0) {
+                this.winner = 'draw'
+            } else if(value > 0 && this.healthMonster <= 0) {
+                this.winner = 'player'
+            }
+        },
+        healthMonster(value) {
+            if(value > 0 && this.healthPlayer <= 0) {
+                this.winner = 'monster'
+            }
         }
     },
     computed: {
-        healthMonsterStyle() { return { width: this.healthMonster + '%' } },
-        healthPlayerStyle() { return { width: this.healthPlayer + '%' } },
+        healthMonsterStyle() {
+            if(this.healthMonster <= 0) {
+                return { width: '0%' } // fixes the health bar
+            } else {
+                return { width: this.healthMonster + '%' }
+            }
+        },
+        healthPlayerStyle() {
+            if(this.healthPlayer <= 0) {
+                return { width: '0%' } // fixes the health bar
+            } else {
+                return { width: this.healthPlayer + '%' }
+            }
+        },
         disableSpecialAttack() {
             // allow to use SpecialAttack every 3 rounds
             return this.currentRound % 3 !== 0 || this.currentRound === 0
         }
     },
     methods: {
+        startGame() {
+            // reset the data for new game
+            this.healthPlayer = 100
+            this.healthMonster = 100
+            this.currentRound = 0
+            this.winner = null
+        },
         attackByMonster() {
             const attackVal = getRandomValue(8, 15)
             this.healthPlayer -= attackVal
@@ -46,6 +80,9 @@ const app = Vue.createApp({
                 this.healthPlayer += healVal;
             }
             this.attackByMonster() // player should still get hit by monster
+        },
+        surrender() {
+            this.winner = 'monster'
         }
     }
 });
