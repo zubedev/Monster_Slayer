@@ -35,6 +35,17 @@ const app = Vue.createApp({
             const attackVal = getRandomValue(10, 25) // larger value than normal
             this.healthMonster -= attackVal
             this.attackByMonster() // player should still get hit by monster
+        },
+        healPlayer() {
+            this.currentRound++ // increment the round count
+            const healVal = getRandomValue(8, 15)
+            // make sure the health value does not exceed 100
+            if(this.healthPlayer + healVal > 100) {
+                this.healthPlayer = 100;
+            } else {
+                this.healthPlayer += healVal;
+            }
+            this.attackByMonster() // player should still get hit by monster
         }
     }
 });
